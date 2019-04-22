@@ -1,4 +1,5 @@
 import csv
+import numpy as np
 
 def import_reward_data():
     file_name = "game_data.csv"
@@ -10,5 +11,17 @@ def import_reward_data():
 
     return data
 
-reward_data = import_reward_data()
+def init_q_table():
+    table = []
+    for x in range(10):
+        row = []
+        for y in range(10):
+            row.append(0)
+        table.append(row)
+    print(table)
+
+def main():
+    reward_data = import_reward_data()
+    q_table = []
+    init_q_table()
 
