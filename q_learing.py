@@ -11,17 +11,13 @@ def import_reward_data():
 
     return data
 
-def init_q_table():
-    table = []
-    for x in range(10):
-        row = []
-        for y in range(10):
-            row.append(0)
-        table.append(row)
-    print(table)
-
 def main():
+    # import reward data from csv file
     reward_data = import_reward_data()
-    q_table = []
-    init_q_table()
 
+    # initialize q-table (set all value to 0(zero))
+    q_table = [[0 for i in range(10)]]*10
+
+    
+
+main()
