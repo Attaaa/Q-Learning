@@ -16,13 +16,13 @@ def update_qval(alpha, q_old, next_reward, gamma, next_q_max):
     return (1 - alpha) * q_old + alpha * (next_reward + gamma * next_q_max)
 
 def select_random_action(state_x, state_y):
-    action = -1
+    action = 0
     actIsValid = False
     temp_state_x = copy.copy(state_x)
     temp_state_y = copy.copy(state_y)
     while not(actIsValid):
-        state_x = temp_state_x
-        state_y = temp_state_y
+        state_x = copy.copy(temp_state_x)
+        state_y = copy.copy(temp_state_y)
         action = np.random.randint(0,4)
         if (action == 0):
             state_y -= 1
@@ -33,7 +33,7 @@ def select_random_action(state_x, state_y):
         elif (action == 3):
             state_x -= 1
         
-        if ((state_x >= 0 and state_x <= 14) or (state_y >= 0 and state_y <= 14)):
+        if ((state_x >= 0 and state_x <= 14) and (state_y >= 0 and state_y <= 14)):
             actIsValid = True
 
     return state_x, state_y, action
@@ -52,7 +52,7 @@ def select_best_action(q_table, state_x, state_y):
         elif (action == 3):
             state_x -= 1
         
-        if ((state_x >= 0 and state_x <= 14) or (state_y >= 0 and state_y <= 14)):
+        if ((state_x >= 0 and state_x <= 14) and (state_y >= 0 and state_y <= 14)):
             actIsValid = True
 
     return state_x, state_y, action
@@ -86,25 +86,33 @@ def main():
         gamma = 0.5
         epsilon = 1
         reward = 0
+        visitedState = np.zeros((15,15))
+        visitedState[state_x][state_y] = 1
         for j in range(10):
             # if exploration rate treshold lest than or equal than exploration rate 
             # choose random action to explore
             next_state_x, next_state_y = 0, 0
             action = 0
-            if (exploration_rate_treshold <= exploration_rate):  
-                # select random action
-                next_state_x, next_state_y, action = select_random_action(state_x, state_y)
-            else:
-                next_state_x, next_state_y, action = select_best_action(q_table, state_x, state_y)
+            while True:
+                if (exploration_rate_treshold <= exploration_rate):  
+                    # select random action
+                    next_state_x, next_state_y, action = select_random_action(state_x, state_y)
+                else:
+                    next_state_x, next_state_y, action = select_best_action(q_table, state_x, state_y)
+                
+                if (visitedState[next_state_x][next_state_y] == 0):
+                    break
 
             q_old = q_table[state_x][state_y][action]
             q_max = np.max(q_table[next_state_x][next_state_y])
             action_reward = reward_data[next_state_x][next_state_y]
+
             # update q table
             q_table[state_x][state_y][action] = update_qval(alpha, q_old, action_reward, gamma, q_max)
 
             state_x = next_state_x
             state_y = next_state_y
+            visitedState[state_x][state_y] = 1
 
         # exploration_rate = exploration_rate_decay(exploration_rate, i)
 
