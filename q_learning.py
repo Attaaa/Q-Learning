@@ -46,7 +46,7 @@ num_episodes = 100
 exploration_rate = init_exploration_rate
 
 # initial state, state[0] for y-axis and state[1] for x-axis of the gridworld
-init_state = [14,0]
+init_state = np.array([14,0])
 
 # initialize q table with zero
 # 15,15 is the dimension of gridworld and 4 is number of action
@@ -54,16 +54,16 @@ q_table = np.zeros((15,15,4))
 
 # visitedState used only for plotting result
 visitedState = np.zeros((15,15))
-visitedState[init_state[0]][init_state[1]] = 1
+visitedState[init_state[0],init_state[1]] = 1
 
 for i in range(1,num_episodes):
-    state = copy(init_state)
+    state = np.copy(init_state)
     reward = 0
     # random_number for exploration exploitation trade-off
     random_number = np.random.rand()
     num_iteration = 0
     while ((state[0] != 0 or state[1] != 14) and num_iteration < 5000):
-        from_state = copy(state)
+        from_state = np.copy(state)
         possible_action = get_possible_action(state)
         action = -1
         if (random_number <= exploration_rate and i != num_episodes-1):
@@ -73,17 +73,18 @@ for i in range(1,num_episodes):
             # get best action, action that have max q value
             temp = {}
             for act in possible_action:
-                temp[act] = copy(q_table[state[0]][state[1]][act])
+                temp[act] = copy(q_table[state[0],state[1]][act])
             action = max(temp.items(), key=operator.itemgetter(1))[0]
 
         state = next_state(state, action)
 
-        old_q = copy(q_table[from_state[0]][from_state[1]][action])
-        next_q = np.max(q_table[state[0]][state[1]])
-        action_reward = reward_data[state[0]][state[1]]
-        reward += action_reward
+        old_q = copy(q_table[from_state[0],from_state[1]][action])
+        next_q = np.max(q_table[state[0],state[1]])
+        action_reward = reward_data[state[0],state[1]]
+        q_table[from_state[0],from_state[1],action] = (1-alpha) * old_q + alpha*(action_reward + gamma * next_q)
 
-        q_table[from_state[0]][from_state[1]][action] = (1-alpha) * old_q + alpha*(action_reward + gamma * next_q)
+        reward += action_reward
+        num_iteration += 1
 
         # output result
         if (i == num_episodes-1):
@@ -92,8 +93,6 @@ for i in range(1,num_episodes):
             print("action = {}".format(action))
             print("to state = {},{}".format(state[0],state[1]))
             print("Reward: {}".format(reward))
-        
-        num_iteration += 1
 
     exploration_rate = init_exploration_rate * np.exp( -0.005*i )
 
