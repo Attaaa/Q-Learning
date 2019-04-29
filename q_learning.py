@@ -38,20 +38,28 @@ def plot_result(visitedState, rewardData):
 
 reward_data = np.genfromtxt('reward.txt', dtype=int)
 
+# initialize q learning parameter
 init_exploration_rate = 1
 alpha = 0.5
 gamma = 0.9
 num_episodes = 100
 exploration_rate = init_exploration_rate
+
+# initial state, state[0] for y-axis and state[1] for x-axis of the gridworld
 init_state = [14,0]
+
+# initialize q table with zero
+# 15,15 is the dimension of gridworld and 4 is number of action
 q_table = np.zeros((15,15,4))
 
+# visitedState used only for plotting result
 visitedState = np.zeros((15,15))
 visitedState[init_state[0]][init_state[1]] = 1
 
 for i in range(1,num_episodes):
     state = copy(init_state)
     reward = 0
+    # random_number for exploration exploitation trade-off
     random_number = np.random.rand()
     num_iteration = 0
     while ((state[0] != 0 or state[1] != 14) and num_iteration < 5000):
@@ -77,6 +85,7 @@ for i in range(1,num_episodes):
 
         q_table[from_state[0]][from_state[1]][action] = (1-alpha) * old_q + alpha*(action_reward + gamma * next_q)
 
+        # output result
         if (i == num_episodes-1):
             visitedState[state[0]][state[1]] = 1
             print("from state = {},{}".format(from_state[0],from_state[1]))

@@ -4,8 +4,12 @@ Q Learning merupakan model algoritma reinforcement learning. Tujuan dari Q Learn
 
 ## Environtment
 
-Environtment yang digunakan dalam program ini adalah sebuah gridworld dengan ukuran 15 x 15 dimana setiap state(grid) memiliki nilai reward masing-masing. Setiap state dapat melakukan empat aksi untuk berpindah ke state lainnya, yaitu up(atas), right(kanan), down(bawah) dan left(kiri).
+Environtment yang digunakan dalam program ini adalah sebuah gridworld dengan ukuran 15 x 15 dimana setiap state(grid) memiliki nilai reward masing-masing. Setiap state dapat melakukan empat aksi untuk berpindah ke state lainnya, yaitu up(atas), right(kanan), down(bawah) dan left(kiri). State awal ditandai dengan warna orange dan state akhir dengan warna kuning. Reward pada environtment ini disimpan dalam file [reward file](./reward.txt "'reward.txt'").
 
-<!-- Table -->
-[![Environtment Screenshot][./img/env]]
-<!-- Table -->
+<!-- image environtment -->
+![Environment](./img/env.PNG)
+
+## Algoritma
+
+Langkah awal untuk melakukan Q learning adalah mengetahui environtment. Dalam program ini dilakukan dengan mengimport nilai reward. 
+
