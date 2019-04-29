@@ -7,7 +7,7 @@ Q Learning merupakan model algoritma reinforcement learning. Tujuan dari Q Learn
 Environtment yang digunakan dalam program ini adalah sebuah gridworld dengan ukuran 15 x 15 dimana setiap state(grid) memiliki nilai reward masing-masing. Setiap state dapat melakukan empat aksi untuk berpindah ke state lainnya, yaitu up(atas), right(kanan), down(bawah) dan left(kiri).
 
 <!-- Table -->
-<table>
+<table style="margin: auto;">
   <tr>
     <th>-1</th>
     <th>-2</th>
